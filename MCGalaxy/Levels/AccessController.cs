@@ -72,7 +72,7 @@ namespace MCGalaxy {
             if (access == AccessResult.Whitelisted) return true;
             
             if (access == AccessResult.Blacklisted) {
-                p.Message("You are blacklisted from {0} {1}", ActionIng, ColoredName);
+                p.Message("You are disallowed from {0} {1}", ActionIng, ColoredName);
                 return false;
             }
             
@@ -133,7 +133,7 @@ namespace MCGalaxy {
         public bool Whitelist(Player p, LevelPermission plRank, Level lvl, string target) {
             if (!CheckList(p, plRank, target, true)) return false;
             if (Whitelisted.CaselessContains(target)) {
-                p.Message("{0} &Sis already whitelisted.", p.FormatNick(target));
+                p.Message("{0} &Sis already allowed.", p.FormatNick(target));
                 return true;
             }
             
@@ -149,7 +149,7 @@ namespace MCGalaxy {
         public bool Blacklist(Player p, LevelPermission plRank, Level lvl, string target) {
             if (!CheckList(p, plRank, target, false)) return false;
             if (Blacklisted.CaselessContains(target)) {
-                p.Message("{0} &Sis already blacklisted.", p.FormatNick(target));
+                p.Message("{0} &Sis already disallowed.", p.FormatNick(target));
                 return true;
             }
             
@@ -171,9 +171,9 @@ namespace MCGalaxy {
         public void OnListChanged(Player p, Level lvl, string name, bool whitelist, bool removedFromOpposite) {
             string msg = p.FormatNick(name);
             if (removedFromOpposite) {
-                msg += " &Swas removed from the " + Type + (whitelist ? " blacklist" : " whitelist");
+                msg += " &Swas removed from the " + Type + (whitelist ? " disallow" : " allow");
             } else {
-                msg += " &Swas " + Type + (whitelist ? " whitelisted" : " blacklisted");
+                msg += " &Swas " + Type + (whitelist ? " allowed" : " disallowed");
             }
             ApplyChanges(p, lvl, msg);
         }
@@ -194,7 +194,7 @@ namespace MCGalaxy {
         
         bool CheckList(Player p, LevelPermission plRank, string name, bool whitelist) {
             if (!CheckDetailed(p, plRank)) {
-                string mode = whitelist ? "whitelist" : "blacklist";
+                string mode = whitelist ? "allow" : "disallow";
                 p.Message("&WHence you cannot modify the {0} {1}.", Type, mode); return false;
             }
             
@@ -202,10 +202,10 @@ namespace MCGalaxy {
             if (group.Permission <= plRank) return true;
             
             if (!whitelist) {
-                p.Message("&WYou cannot blacklist players of a higher rank.");
+                p.Message("&WYou cannot disallow players of a higher rank.");
                 return false;
             } else if (Check(name, group.Permission) == AccessResult.Blacklisted) {
-                p.Message("{0} &Sis blacklisted from {1} {2}&S.",
+                p.Message("{0} &Sis disallowed from {1} {2}&S.",
                           p.FormatNick(name), ActionIng, ColoredName);
                 return false;
             }

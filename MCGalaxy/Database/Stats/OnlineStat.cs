@@ -126,7 +126,7 @@ namespace MCGalaxy.DB
             
             p.Message("  The IP of " + ipMsg);
             if (Server.Config.WhitelistedOnly && Server.whiteList.Contains(name))
-                p.Message("  Player is &fWhitelisted");
+                p.Message("  Player is &fAllowlisted");
         }
                 
         public static void IdleLine(Player p, Player who) {

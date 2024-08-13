@@ -48,7 +48,7 @@ namespace MCGalaxy.Commands.World
         static bool SetList(Player p, string name,
                             AccessController access, CommandData data, Level lvl) {
             bool include = name[0] == '+';
-            string mode = include ? "whitelist" : "blacklist";
+            string mode = include ? "allow" : "disallow";
             name = name.Substring(1);
             if (name.Length == 0) {
                 p.Message("You must provide a player name to {0}.", mode);
@@ -59,7 +59,7 @@ namespace MCGalaxy.Commands.World
             if (name == null) return false;
             
             if (!include && name.CaselessEq(p.name)) {
-                p.Message("&WYou cannot blacklist yourself."); return false;
+                p.Message("&WYou cannot disallow yourself."); return false;
             }
             
             if (include) {

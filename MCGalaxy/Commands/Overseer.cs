@@ -454,7 +454,7 @@ namespace MCGalaxy.Commands.World {
                 p.Message("To disallow visiting, use &T/{0} ban [name]", commandShortcut);
             } else if (cmd == "UNBLOCK") {
                 p.Message("To allow visiting, use &T/{0} unban [name]", commandShortcut);
-            } else if (cmd == "BLACKLIST") {
+            } else if (cmd == "DISALLOW") {
                 p.Message("To see who is disallowed from visiting, use &T/mapinfo");
             } else {
                 p.Message("&H  This was used for managing permissions in your map.");

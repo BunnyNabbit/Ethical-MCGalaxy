@@ -86,7 +86,7 @@ namespace MCGalaxy.Commands.Misc {
             if (result == AccessResult.BelowMinRank && confirmed) return true;
             
             if (result == AccessResult.Blacklisted) {
-                p.Message("{0} &Sis blacklisted from visiting this map.", p.FormatNick(target));
+                p.Message("{0} &Sis disallowed from visiting this map.", p.FormatNick(target));
                 return false;
             } else if (result == AccessResult.BelowMinRank) {
                 p.Message("Only {0}&S+ may normally visit this map. {1}&S is ranked {2}",
