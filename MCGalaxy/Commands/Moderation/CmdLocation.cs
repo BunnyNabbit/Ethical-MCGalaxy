@@ -1,5 +1,5 @@
 /*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
 
     Dual-licensed under the    Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -16,9 +16,11 @@
     permissions and limitations under the Licenses.
  */
 using System;
+using System.Collections.Generic;
 using System.Net;
 using MCGalaxy.Config;
 using MCGalaxy.Network;
+using MCGalaxy.Util;
 
 namespace MCGalaxy.Commands.Moderation {
     public class CmdLocation : Command2 {
@@ -60,6 +62,8 @@ namespace MCGalaxy.Commands.Moderation {
             object region = null, country = null;
             obj.TryGetValue("region",   out region);
             obj.TryGetValue("country", out country);
+            string fullName = CountryUtils.GetName(country.ToString());
+            if (fullName != null) country = fullName;
             
             string suffix = HasExtraPerm(p, data.Rank, 1) ? "&b{1}&S/&b{2}" : "&b{2}";
             string nick   = name == null ? ip : "of " + p.FormatNick(name);

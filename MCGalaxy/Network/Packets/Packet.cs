@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
         
     Dual-licensed under the Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -688,6 +688,23 @@ namespace MCGalaxy.Network
             buffer[0] = Opcode.CpeLightingMode;
             buffer[1] = (byte)mode;
             buffer[2] = (byte)(locked ? 1 : 0);
+            return buffer;
+        }
+
+        public static byte[] SetCinematicGui(bool hideCrosshair, bool hideHand, bool hideHotbar, byte r, byte g, byte b, byte opacity, ushort barSize)
+        {
+            byte[] buffer = new byte[10];
+            buffer[0] = Opcode.CpeCinematicGui;
+            buffer[1] = (byte)(hideCrosshair ? 1 : 0);
+            buffer[2] = (byte)(hideHand ? 1 : 0);
+            buffer[3] = (byte)(hideHotbar ? 1 : 0);
+
+            buffer[4] = r;
+            buffer[5] = g;
+            buffer[6] = b;
+            buffer[7] = opacity;
+
+            NetUtils.WriteU16(barSize, buffer, 8);
             return buffer;
         }
         #endregion

@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
         
     Dual-licensed under the Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -79,5 +79,6 @@ namespace MCGalaxy.Network {
         public const byte CpePluginMessage = 53;
         public const byte CpeEntityTeleportExt = 54;
         public const byte CpeLightingMode = 55;
+        public const byte CpeCinematicGui = 56;
     }
 }

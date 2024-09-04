@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
         
     Dual-licensed under the Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -28,21 +28,20 @@ namespace MCGalaxy.Modules.Games.LS
         static Command cmdLS = new CmdLavaSurvival();
         
         public override void Load(bool startup) {
-            OnConfigUpdatedEvent.Register(OnConfigUpdated, Priority.Low);
             Command.Register(cmdLS);
             
-            LSGame.Instance.Config.Path = "properties/lavasurvival.properties";
-            OnConfigUpdated();
-            LSGame.Instance.AutoStart();
+            LSGame game      = LSGame.Instance;
+            game.Config.Path = "properties/lavasurvival.properties";
+            game.ReloadConfig();
+            game.AutoStart();
+            
+            OnConfigUpdatedEvent.Register(game.ReloadConfig, Priority.Low);
         }
         
         public override void Unload(bool shutdown) {
-            OnConfigUpdatedEvent.Unregister(OnConfigUpdated);
+            LSGame game = LSGame.Instance;
+            OnConfigUpdatedEvent.Unregister(game.ReloadConfig);
             Command.Unregister(cmdLS);
-        }
-        
-        void OnConfigUpdated() { 
-            LSGame.Instance.Config.Load();
         }
     }
 }

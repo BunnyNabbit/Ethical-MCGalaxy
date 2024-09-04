@@ -639,6 +639,7 @@
     <Compile Include="Player\Player.Handlers.cs" />
     <Compile Include="Player\Player.Login.cs" />
     <Compile Include="Player\PlayerActions.cs" />
+    <Compile Include="Player\CinematicGui.cs" />
     <Compile Include="Player\PlayerIgnores.cs" />
     <Compile Include="Player\PlayerInfo.cs" />
     <Compile Include="Player\PlayerOperations.cs" />
@@ -665,6 +666,7 @@
     <Compile Include="Server\Maintenance\Updater.cs" />
     <Compile Include="Server\Maintenance\ZipReader.cs" />
     <Compile Include="Server\Maintenance\ZipWriter.cs" />
+    <Compile Include="util\CountryUtils.cs" />
     <Compile Include="util\Formatting\Wildcard.cs" />
     <Compile Include="util\ImageUtils.cs" />
     <Compile Include="util\DotnetBackend.cs" />

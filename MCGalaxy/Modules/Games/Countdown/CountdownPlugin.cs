@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
         
     Dual-licensed under the Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -28,21 +28,20 @@ namespace MCGalaxy.Modules.Games.Countdown
         static Command cmdCD = new CmdCountdown();
         
         public override void Load(bool startup) {
-            OnConfigUpdatedEvent.Register(OnConfigUpdated, Priority.Low);
             Command.Register(cmdCD);
             
-            CountdownGame.Instance.Config.Path = "properties/countdown.properties";
-            OnConfigUpdated();
-            CountdownGame.Instance.AutoStart();
+            CountdownGame game = CountdownGame.Instance;
+            game.Config.Path   = "properties/countdown.properties";
+            game.ReloadConfig();
+            game.AutoStart();
+            
+            OnConfigUpdatedEvent.Register(game.ReloadConfig, Priority.Low);
         }
         
         public override void Unload(bool shutdown) {
-            OnConfigUpdatedEvent.Unregister(OnConfigUpdated);
+            CountdownGame game = CountdownGame.Instance;
+            OnConfigUpdatedEvent.Unregister(game.ReloadConfig);
             Command.Unregister(cmdCD);
-        }
-        
-        void OnConfigUpdated() { 
-            CountdownGame.Instance.Config.Load();
         }
     }
 }

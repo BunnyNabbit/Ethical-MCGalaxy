@@ -15,18 +15,25 @@
     or implied. See the Licenses for the specific language governing
     permissions and limitations under the Licenses.
  */
-using System;
 
-namespace MCGalaxy.Config {
 
-    public abstract class ConfigAttribute : Attribute {       
-        public string Name, Section;
-        
-        public abstract object Parse(string value);
-        public virtual string Serialise(object value) { return value == null ? "" : value.ToString(); }
-        
-        public ConfigAttribute(string name, string section) {
-            Name = name; Section = section;
-        }
+namespace MCGalaxy {
+
+    /// <summary>
+    /// Describes options for cinematic gui. It may be sent to a player using Player.Session.SendCinematicGui
+    /// </summary>
+    public class CinematicGui {
+
+        public bool hideCrosshair;
+        public bool hideHand;
+        public bool hideHotbar;
+        /// <summary>
+        /// The color of the cinematic bars, if visible
+        /// </summary>
+        public ColorDesc barColor = new ColorDesc(0, 0, 0);
+        /// <summary>
+        /// From 0 to 1 where 0 is not visible and 1 is screen fully covered
+        /// </summary>
+        public float barSize;
     }
 }

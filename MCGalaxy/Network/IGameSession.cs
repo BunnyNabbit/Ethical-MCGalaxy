@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2015 MCGalaxy
+    Copyright 2015-2024 MCGalaxy
         
     Dual-licensed under the Educational Community License, Version 2.0 and
     the GNU General Public License, Version 3 (the "Licenses"); you may
@@ -16,6 +16,7 @@
     permissions and limitations under the Licenses.
  */
 using System;
+using MCGalaxy.Maths;
 using BlockID = System.UInt16;
 
 namespace MCGalaxy.Network
@@ -109,6 +110,10 @@ namespace MCGalaxy.Network
         public abstract bool SendDefineBlock(BlockDefinition def);
         /// <summary> Sends an undefine custom block packet to the client </summary>
         public abstract bool SendUndefineBlock(BlockDefinition def);
+        public abstract bool SendAddSelection(byte id, string label, Vec3U16 p1, Vec3U16 p2, ColorDesc color);
+        public abstract bool SendRemoveSelection(byte id);
+        /// <summary> Sends a cinematic gui definition to the client </summary>
+        public abstract bool SendCinematicGui(CinematicGui gui);
 
         /// <summary> Sends a level to the client </summary>
         public abstract void SendLevel(Level prev, Level level);
@@ -145,5 +150,6 @@ namespace MCGalaxy.Network
             if (!hasCustomBlocks) raw = fallback[(byte)raw];
             return raw;
         }
+
     }
 }
