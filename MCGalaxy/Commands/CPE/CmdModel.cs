@@ -38,7 +38,7 @@ namespace MCGalaxy.Commands.CPE
                 message = "-own " + message;
                 message = message.TrimEnd();
             }
-            UseBotOrOnline(p, data, message, "model");
+            UseBotOrPlayer(p, data, message, "model");
         }
         
         protected override void SetBotData(Player p, PlayerBot bot, string model) {
@@ -50,27 +50,29 @@ namespace MCGalaxy.Commands.CPE
             BotsFile.Save(p.level);
         }
         
-        protected override void SetOnlineData(Player p, Player who, string model) {
+        protected override void SetPlayerData(Player p, string target, string model) {
             string orig = model;
-            model = ParseModel(p, who, model);
+            model = ParseModel(p, p, model);
             if (model == null) return;
-            who.UpdateModel(model);
             
+            Player who = PlayerInfo.FindExact(target);
             if (p != who) {
-                Chat.MessageFrom(who, "λNICK &Shad " + who.pronouns.Object + " model changed to &c" + model);
+                if (who != null) Chat.MessageFrom(who, "λNICK &Shad " + who.pronouns.Object + " model changed to &c" + model);
             } else {
                 who.Message("Changed your own model to &c" + model);
             }
             
             if (!model.CaselessEq("humanoid")) {
-                Server.models.Update(who.name, model);
+                Server.models.Update(target, model);
             } else {
-                Server.models.Remove(who.name);
+                Server.models.Remove(target);
             }
             Server.models.Save();
-            
-            // Remove model scale too when resetting model
-            if (orig.Length == 0) CmdModelScale.UpdateSavedScale(who);
+            if (who != null) {
+                who.UpdateModel(model);
+                // Remove model scale too when resetting model
+                if (orig.Length == 0) CmdModelScale.UpdateSavedScale(who);
+            }
         }
         
         static string ParseModel(Player dst, Entity e, string model) {
