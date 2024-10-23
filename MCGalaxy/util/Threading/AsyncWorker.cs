@@ -68,6 +68,7 @@ namespace MCGalaxy
         public void RunAsync() {
             Thread worker;
             Server.StartThread(out worker, ThreadName, SendLoop);
+            Utils.SetBackgroundMode(worker);
         }
         
         public void StopAsync() {

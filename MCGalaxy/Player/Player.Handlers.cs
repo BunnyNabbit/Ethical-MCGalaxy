@@ -558,6 +558,7 @@ namespace MCGalaxy
                 
                 Thread thread;
                 Server.StartThread(out thread, "CMD_ " + cmd, callback);
+                Utils.SetBackgroundMode(thread);
             } catch (Exception e) {
                 Logger.LogError(e);
                 Message("&WCommand failed");
@@ -584,6 +585,7 @@ namespace MCGalaxy
                 Thread thread;
                 Server.StartThread(out thread, "CMDS_", 
                                    () => UseCommands(commands, messages, data));
+                Utils.SetBackgroundMode(thread);
             } catch (Exception e) {
                 Logger.LogError(e);
                 Message("&WCommand failed.");

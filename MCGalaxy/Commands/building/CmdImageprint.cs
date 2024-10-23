@@ -107,6 +107,7 @@ namespace MCGalaxy.Commands.Building {
             Thread thread;
             Server.StartThread(out thread, "ImagePrint",
                                () => DoDrawImage(p, m, (DrawArgs)state));
+            Utils.SetBackgroundMode(thread);
             return false;
         }
         
