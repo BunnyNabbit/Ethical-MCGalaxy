@@ -87,12 +87,10 @@ namespace MCGalaxy.Bots {
                 props.Add(data);
             }
             
-            string tmpPath = path + ".tmp";
             try {
-                using (StreamWriter w = new StreamWriter(tmpPath)) { WriteAll(w, props); }
-                
-                AtomicIO.TryDelete(path);
-                File.Move(tmpPath, path);
+                using (StreamWriter w = FileIO.CreateGuarded(path)) { 
+                    WriteAll(w, props); 
+                }
             } catch (Exception ex) {
                 Logger.LogError("Error saving bots to " + path, ex);
             }

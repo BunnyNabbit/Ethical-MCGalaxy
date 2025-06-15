@@ -24,7 +24,8 @@ using MCGalaxy.Util;
 namespace MCGalaxy {
     public static class ProfanityFilter {
         static string[] reduceKeys, reduceValues;
-        static List<string> filters;
+        static List<string> goodWords;
+        static List<string> badWords;
         static bool hookedFilter;
         
         public static void Init() {
@@ -37,28 +38,36 @@ namespace MCGalaxy {
             string[] words   = text.SplitSpaces();
             string[] reduced = Reduce(text).SplitSpaces();
 
-            // Loop through each reduced word, looking for a bad word
-            for (int i = 0; i < reduced.Length; i++) 
-            {
-                bool isFiltered = false;
-                foreach (string filter in filters) 
-                {
-                    if (reduced[i].Contains(filter)) {
-                        isFiltered = true; break;   
-                    }
-                }
-                if (!isFiltered) continue;
-
-                // If a bad word is found anywhere in the word, replace the word            
-                words[i] = Replace(words[i]);
-            }            
+            for (int i = 0; i < reduced.Length; i++)  {
+                if (IsGoodWord(words[i])) continue;
+                FilterBadWord(i, words, reduced);
+            }          
             return String.Join(" ", words);
         }
-        
-        static string Replace(string word) {
+
+        static bool IsGoodWord(string word) {
+            foreach (string goodWord in goodWords) {
+                if (Colors.Strip(word).CaselessEq(goodWord)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static void FilterBadWord(int i, string[] words, string[] reduced) {
+            foreach (string badWord in badWords)  {
+                if (reduced[i].Contains(badWord)) {
+                    // If a bad word is found anywhere in the word, replace the word            
+                    words[i] = Censor(Colors.Strip(words[i]).Length);
+                    return;
+                }
+            }
+        }
+
+        static string Censor(int badWordLength) {
             string replacement = Server.Config.ProfanityReplacement;
             // for * repeat to ****
-            return replacement.Length == 1 ? new string(replacement[0], word.Length) : replacement;
+            return replacement.Length == 1 ? new string(replacement[0], badWordLength) : replacement;
         }
         
         static void InitReduceTable() {
@@ -70,23 +79,23 @@ namespace MCGalaxy {
         }
         
         static void LoadBadWords() {
-            TextFile filterFile = TextFile.Files["Profanity filter"];
-            filterFile.EnsureExists();
+            // Duplicated literal const values? tsk x1000
+            TextFile goodWordsFile = TextFile.Files["Profanity filter exceptions"];
+            TextFile badWordsFile  = TextFile.Files["Profanity filter"];
+            goodWordsFile.EnsureExists();
+            badWordsFile.EnsureExists();
             
             if (!hookedFilter) {
                 hookedFilter = true;
-                filterFile.OnTextChanged += LoadBadWords;
+                badWordsFile.OnTextChanged += LoadBadWords;
+                goodWordsFile.OnTextChanged += LoadBadWords;
             }
 
-            string[] lines = filterFile.GetText();
-            filters = new List<string>();
+            goodWords = goodWordsFile.GetTextWithoutComments();
+            badWords  =  badWordsFile.GetTextWithoutComments();
             // Run the badwords through the reducer to ensure things like Ls become Is and everything is lowercase
-            foreach (string line in lines) 
-            {
-                if (line.StartsWith("#") || line.Trim().Length == 0) continue;
-                
-                string word = Reduce(line);
-                filters.Add(word);
+            for (int i = 0; i < badWords.Count; i++)  {
+                badWords[i] = Reduce(badWords[i]);
             }
         }
 

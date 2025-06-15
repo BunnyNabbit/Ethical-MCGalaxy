@@ -93,13 +93,6 @@ namespace MCGalaxy
             }
         }
         
-        public static void SerialiseSimple(ConfigElement[] elements, string path, object instance) {
-            using (StreamWriter w = new StreamWriter(path)) {
-                w.WriteLine("#Settings file");
-                SerialiseElements(elements, w, instance);
-            }
-        }
-        
         public static void SerialiseElements(ConfigElement[] elements, TextWriter w, object instance) {
             foreach (ConfigElement elem in elements) 
             {

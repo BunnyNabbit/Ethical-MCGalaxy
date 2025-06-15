@@ -20,8 +20,8 @@ using System.IO;
 
 namespace MCGalaxy 
 {   
-    /// <summary> Provides utility methods for atomic File I/O operations. </summary>
-    public static class AtomicIO 
+    /// <summary> Provides utility methods for File I/O operations. </summary>
+    public static class FileIO 
     {        
         /// <summary> Attempts to delete a file from disc, if it exists </summary>
         /// <returns> true if file was successfully deleted, false if file did not exist to begin with </returns>
@@ -54,6 +54,36 @@ namespace MCGalaxy
                 return Directory.GetFiles(directory, searchPattern);
             } catch (DirectoryNotFoundException) {
                 return null;
+            }
+        }
+        
+        /// <summary> Returns a StreamWriter that writes data to a temp file path first,
+        /// and only overwrites the real file when .Dispose() is called </summary>
+        /// <remarks> Reduces the chance of data corruption in full disks </remarks>
+        public static StreamWriter CreateGuarded(string path) {
+            return new GuardedWriter(path);
+        }
+        
+        
+        class GuardedWriter : StreamWriter
+        {
+            readonly string realPath;
+            public GuardedWriter(string path) : base(path + ".tmp") {
+                realPath = path;
+            }
+            
+            protected override void Dispose(bool disposing) {
+                base.Dispose(disposing);
+                string src = realPath + ".tmp";
+                string dst = realPath;
+                string old = realPath + ".old";
+                
+                FileIO.TryDelete(old);
+                bool didExist = FileIO.TryMove(dst, old);
+                File.Move(src, dst);
+                
+                // Only delete old 'good' file if everything worked
+                if (didExist) FileIO.TryDelete(old);
             }
         }
     }
